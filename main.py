@@ -20,7 +20,7 @@ def getPitch(index, frameLength):
   hamming = np.hamming(frameLength)
   if (markPoint[index] == 1):
     frame = framesArray[index] * hamming
-    spt = abs(np.fft.fft(frame, 2 ** 12))[:2 ** 11]
+    spt = abs(np.fft.fft(frame, 2 ** 13))[:2 ** 12]
     peaks, _  = find_peaks(spt, distance=10, prominence=8)
     fs = np.linspace(0, frequency / 2, len(spt))
     if len(peaks) >= 3:
@@ -68,13 +68,18 @@ for i in range(0, len(FILE_WAV_THKT)):
   plt.title(f"Signal: {FILE_WAV_THKT[i]}")
   plt.plot(timeSample, signal)
   plt.plot(timeSampleSTE, STEArray, 'r')
+  plt.axhline(y=0.04772, color='orange', linestyle='-')
   for i in range(1, len(markPoint)):
     if markPoint[i] == 1 and markPoint[i - 1] == 0 or markPoint[i] == 0 and markPoint[i - 1] == 1:
-      plt.axvline(x = TIME_FRAME * i / 3, color = 'b')
+      plt.axvline(x = TIME_FRAME * i / 3, color = 'b', linestyle = 'dashed')
+  plt.legend(['Signal', 'STE', 'Threshold', 'Biên vẽ'])
   plt.subplot(4, 1, 2)
+  plt.title(f"F0 FFT - F0mean = {0}, F0std = {0}")
+  plt.ylim([0, 450])
   plt.plot(timeSampleF0, F0, '.')
   plt.subplot(4, 1, 3)
-  plt.plot(np.linspace(0, frequency / 2, 2 ** 11))
+  plt.plot(np.linspace(0, frequency / 2, 2 ** 12))
+  plt.tight_layout()
 plt.show()
 
 
