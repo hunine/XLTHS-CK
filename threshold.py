@@ -35,8 +35,8 @@ def calThreshold(fileLab, STEArray):
         f.append(STEArray[j])
     else:
       index += 1
-  Tmin = min(f)
-  Tmax = max(g)
+  Tmin = max(g)
+  Tmax = min(f)
   T = (Tmin + Tmax) / 2
   tempF = tempG = -1
   countF = countG = 0
@@ -88,4 +88,4 @@ for i in range(0, len(FILE_WAV_THHL)):
   thresholdsArray = np.append(thresholdsArray, T)
   
 print(thresholdsArray)
-print(np.average(thresholdsArray))
+print(f"Threshold = {np.average(thresholdsArray)}")
