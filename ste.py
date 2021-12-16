@@ -25,7 +25,7 @@ def findSpeechAndSilence(STEArray, threshold = 0.04772):
     if markSpeech[i] == 0 and markSpeech[i - 1] == 0:
       countZero += 1
     elif markSpeech[i] == 1 and markSpeech[i - 1] == 0:
-      if countZero < 10:
+      if countZero < 30:
         for j in range(firstPosition, i):
           markSpeech[j] = 1
       countZero = 1
