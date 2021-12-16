@@ -28,28 +28,30 @@ TIME_FRAME = 0.03
 
 # Main
 for i in range(0, len(FILE_WAV_THKT)):
+  # Đọc dữ liệu đầu vào
   frequency, signal = read(join(FILE_PATH_THKT, FILE_WAV_THKT[i]))
-  
   signal = signal / max(np.max(signal), abs(np.min(signal)))
   frameLength = int(TIME_FRAME * frequency) # Độ dài của 1 frame (đơn vị mẫu)
   framesArray = frame.getFramesArray(signal, frameLength)
   STEArray = ste.calSTE(framesArray)
   markPoint = ste.findSpeechAndSilence(STEArray)
   
+  # Tín hiệu trên miền thời gian
   timeSample = np.zeros(len(signal))
   for index in range(len(signal)):
     timeSample[index] = index / frequency
-    
+  
   timeSampleSTE = np.zeros(len(STEArray))
   for index in range(len(STEArray)):
     timeSampleSTE[index] = TIME_FRAME * index / 3
   
+  # Tính F0
   F0 = np.zeros(len(framesArray))
   timeSampleF0 = np.zeros(len(framesArray))
   for index in range(len(framesArray)):
       F0[index] = pitch.getPitch(index, frequency, framesArray, frameLength, markPoint)
       timeSampleF0[index] = TIME_FRAME * index / 3  
-      
+  
   F0mean = np.mean([value for value in F0 if value > 0 and value < 450])
   F0std = np.std([value for value in F0 if value > 0 and value < 450])
   

@@ -11,6 +11,7 @@ FILE_LAB_THHL = ['01MDA.lab', '02FVA.lab', '03MAB.lab', '06FTB.lab']
 INDEX = 0
 TIME_FRAME = 0.03
 
+# Đọc dữ liệu
 def readFileInput(fileName):
     inputFile = []
     with open(join(FILE_PATH_THHL, fileName)) as file:
@@ -22,11 +23,13 @@ def readFileInput(fileName):
     
     inputFile = inputFile[:-2]
     return inputFile
-  
+
+# Tìm ngưỡng
 def calThreshold(fileLab, STEArray):
   f = []
   g = []
   index = 0
+  # Chia STE của từng đoạn tiếng nói và khoảng lặng
   for j in range(len(STEArray)):
     if j >= fileLab[index][0] and j < fileLab[index][1]:
       if fileLab[index][2] == 'sil':
@@ -35,6 +38,7 @@ def calThreshold(fileLab, STEArray):
         f.append(STEArray[j])
     else:
       index += 1
+      
   Tmin = max(g)
   Tmax = min(f)
   T = (Tmin + Tmax) / 2
@@ -45,7 +49,7 @@ def calThreshold(fileLab, STEArray):
     countF += 1 if value > T else 0
   for value in g:
     countG += 1 if value < T else 0
-    
+
   while tempF != countF or tempG != countG:
     avgF = 0
     avgG = 0
@@ -78,11 +82,12 @@ def calThreshold(fileLab, STEArray):
 thresholdsArray = np.array([])
 
 for i in range(0, len(FILE_WAV_THHL)):
+  # Đọc dữ liệu của file huấn luyện
   frequency, signal = read(join(FILE_PATH_THHL, FILE_WAV_THHL[i]))  
   signal = signal / max(np.max(signal), abs(np.min(signal)))
   frameLength = int(TIME_FRAME * frequency) # Độ dài của 1 frame (đơn vị mẫu)
   framesArray = frame.getFramesArray(signal, frameLength)
-  STEArray = ste.calSTE(framesArray)
+  STEArray = ste.calSTE(framesArray) # Mảng giá trị STE
   fileLab = readFileInput(FILE_LAB_THHL[i])
   T = calThreshold(fileLab, STEArray)
   thresholdsArray = np.append(thresholdsArray, T)

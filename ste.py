@@ -13,7 +13,7 @@ def calSTE(framesArray):
 # Phân biệt đoạn tiếng nói và đoạn khoảng lặng
 def findSpeechAndSilence(STEArray, threshold = 0.04772):
   markSpeech = np.zeros(len(STEArray))
-  
+  # Đánh dấu đoạn tiếng nói
   for i in range(len(STEArray)):
     if STEArray[i] >= threshold:
       markSpeech[i] = 1
