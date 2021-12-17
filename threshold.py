@@ -39,8 +39,8 @@ def calThreshold(fileLab, STEArray):
     else:
       index += 1
       
-  Tmin = max(g)
-  Tmax = min(f)
+  Tmin = min(f)
+  Tmax = max(g)
   T = (Tmin + Tmax) / 2
   tempF = tempG = -1
   countF = countG = 0
